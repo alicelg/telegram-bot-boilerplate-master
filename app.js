@@ -47,10 +47,11 @@ bot.use(async (ctx, next) => {
 
 
 /*  */
-bot.command('random', async (ctx) => {
+/* bot.command('random', async (ctx) => {
+
   const usuarios = await usuario.find()
-  bot.telegram.sendMessage(usuarios[0].id, 'Hola desde random')
-});
+  bot.telegram.sendMessage(usuarios[Math.random() * items.length].id, 'Hola desde random')
+}); */
 
 bot.command('test', (ctx) => {
   ctx.reply('Hola amiguito');
@@ -65,7 +66,7 @@ bot.command('start', (ctx) => {
 
 bot.command('info', (ctx) => {
   console.log(ctx.message);
-  ctx.reply('Tienes un día aburrido, riete un rato con: \n \n /chisteRandom = Riete un rato \n /top10 = Los 10 mejores \n /chisteDay = El chiste del día \n /ayuda = ¿Necesitas ayuda?  \n /creator = Conocenos \n ');
+  ctx.reply('Tienes un día aburrido, riete un rato con: \n \n /chisteRandom = Riete un rato \n /top5 = Los 5 mejores \n /chisteDay = El chiste del día \n /ayuda = ¿Necesitas ayuda?  \n /creator = Conocenos \n ');
 });
 
 /* un chiste random */
@@ -73,18 +74,18 @@ bot.command('chisteRandom', (ctx) => {
   ctx.reply('—Buenas, venía a donar un riñón. \n —¿Apellido?\n —Maldonado.\n —¿Ya se está arrepintiendo?');
 });
 
-/* top 10 de chistes */
-bot.command('top10', (ctx) => {
-  ctx.reply('Los mejores 10 chistes:  \n \n 🏆 1. 2. 3. 4. 5. 6. 7. 8.  9. 10. ');
+
+bot.command('top5', (ctx) => {
+  ctx.reply('Los mejores 5chistes:  \n \n 🏆 1.— Me da un café con leche corto. \n— Se me ha roto la máquina, cambio. \n \n2. - Oye, ¿cuál es tu plato favorito y por qué?- \n—Pues el hondo, porque cabe más comida… \n \n3.- Ayer llamé a la policía porque unos ladrones robaron en mi casa y se llevaron hasta los vasos. \n - ¿Y los detuvo?\n -Sí, sí, los de tubo también. \n \n4.¡Me acaba de picar una serpiente! \n— ¿Cobra? \n— ¡No, idiota, lo ha hecho gratis! \n \n 5. ¿Está blando el pan?\nYo no he oído nada');
 });
 
-/* un chiste random */
 bot.command('chisteDay', (ctx) => {
-  ctx.reply('');
+  ctx.reply('- Sabes que el salmón es 50% sal? - \n Y el otro 50%?\n - Mon.');
 });
+
 
 // Comando de ayuda
-bot.command('ayuda', (ctx) => ctx.reply('Hola soy PepeBot, me gustan los chistes, no todos son buenos, pero a mi me dan mucha risa. Puedes verlos en: \n \n /chisteRandom 🤪 \n /top10 🏆'))
+bot.command('ayuda', (ctx) => ctx.reply('Hola soy PepeBot, me gustan los chistes, no todos son buenos, pero a mi me dan mucha risa. Puedes verlos en: \n \n /chisteRandom 🤪 \n /top5 🏆'));
 
 /* nosotros */
 bot.command('creator', (ctx) => {
