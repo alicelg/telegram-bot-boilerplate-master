@@ -4,6 +4,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const Telegraf = require('telegraf');
+const usuario = require('./models/usuario');
+
 
 let foto = 'https://drive.google.com/drive/my-drive'
 
@@ -12,17 +14,43 @@ const bot = new Telegraf('1467431714:AAGebzct3_l_oMl8Fw0HO8MK1grVtHbGVks');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-/* const apiRouter = require('./routes/api'); */
+
 
 const app = express();
+require('./dbConfig'); //requiero el fichero creado dbConfig
 
 app.use(bot.webhookCallback('/secret-path'))
+
+
 // Modifica la URL
 bot.telegram.setWebhook('https://f69f510124d9.ngrok.io/secret-path')
 
 app.post('/secret-path', (req, res) => {
   res.end('Finaliza petición')
 })
+
+/* MIDDLEWARE */
+
+bot.use(async (ctx, next) => {
+  usuario.create({
+    user_name: ctx.message.from.user_name,
+    first_name: ctx.message.from.first_name,
+    last_name: ctx.message.from.last_name,
+    id: ctx.message.from.id
+  })
+  await next()
+});
+
+
+
+/* FIN DEL MIDDLEWARE */
+
+
+/*  */
+bot.command('random', async (ctx) => {
+  const usuarios = await usuario.find()
+  bot.telegram.sendMessage(usuarios[0].id, 'Hola desde random')
+});
 
 bot.command('test', (ctx) => {
   ctx.reply('Hola amiguito');
@@ -35,19 +63,33 @@ bot.command('start', (ctx) => {
 });
 
 
-
-
 bot.command('info', (ctx) => {
   console.log(ctx.message);
-  ctx.reply('Tienes un día aburrido, riete un rato con: \n \n /chisteRandom = Riete un rato \n /top10 = los 10 mejores chistes \n /creator = Conocenos \n ');
+  ctx.reply('Tienes un día aburrido, riete un rato con: \n \n /chisteRandom = Riete un rato \n /top10 = Los 10 mejores \n /chisteDay = El chiste del día \n /ayuda = ¿Necesitas ayuda?  \n /creator = Conocenos \n ');
 });
 
+/* un chiste random */
+bot.command('chisteRandom', (ctx) => {
+  ctx.reply('—Buenas, venía a donar un riñón. \n —¿Apellido?\n —Maldonado.\n —¿Ya se está arrepintiendo?');
+});
 
+/* top 10 de chistes */
+bot.command('top10', (ctx) => {
+  ctx.reply('Los mejores 10 chistes:  \n \n 🏆 1. 2. 3. 4. 5. 6. 7. 8.  9. 10. ');
+});
+
+/* un chiste random */
+bot.command('chisteDay', (ctx) => {
+  ctx.reply('');
+});
+
+// Comando de ayuda
+bot.command('ayuda', (ctx) => ctx.reply('Hola soy PepeBot, me gustan los chistes, no todos son buenos, pero a mi me dan mucha risa. Puedes verlos en: \n \n /chisteRandom 🤪 \n /top10 🏆'))
+
+/* nosotros */
 bot.command('creator', (ctx) => {
   return ctx.replyWithPhoto(foto), ctx.reply('PepeBot: by Laura, Alfredo, Leticia y Alice \nCopyright©-2020')
 });
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
