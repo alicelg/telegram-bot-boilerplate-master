@@ -1,2 +1,0 @@
-/* Creamos las acciones  */
-
